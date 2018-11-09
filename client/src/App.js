@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import {Route} from "react-router-dom";
+import Project from "./Project";
+import ProjectList from "./ProjectList";
 
 import './App.css';
 
@@ -27,17 +30,8 @@ if (!this.state.projects.length) {
 
     return (
       <div className="App">
- <div className="project-list-wrapper">
- {this.state.projects.map(project=>{
-   return (
-     <div key={project.id} className="project">
-     <h1 className="project-name">{project.name}</h1>
-     <h3 className="project-description">{project.description}</h3>
-     <h5 className="project-completed">{project.completed}</h5>
-     </div>
-   )
- })}
- </div>
+<Route exact path="/" render={ownProps=>(<ProjectList {...ownProps} projects={this.state.projects}/>)}/> 
+ <Route exact path="/:id" render={ownProps=>(<Project {...ownProps} projects={this.state.projects}/>)}/>     
       </div>
     );
   }
