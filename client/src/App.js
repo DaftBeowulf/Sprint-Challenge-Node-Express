@@ -14,14 +14,10 @@ class App extends Component {
   }
 
 
-fetchProjects = () => {
+componentDidMount() {
   axios.get('http://localhost:7000/api/projects')
   .then(res=>this.setState({projects:res.data}))
   .catch(err=>console.log(err, "We failed to retrieve the list of projects."))
-}
-
-componentDidMount() {
-  this.fetchProjects;
 }
 
   render() {
