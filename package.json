@@ -2,10 +2,9 @@
   "name": "Sprint-Challenge-Node-Express",
   "version": "1.0.0",
   "description": "## Assignments",
-  "main": "knexfile.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "server": "nodemon index.js"
+    "start": "nodemon"
   },
   "repository": {
     "type": "git",
