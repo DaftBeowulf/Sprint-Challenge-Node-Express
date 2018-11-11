@@ -38,15 +38,16 @@ router.get('/:id', (req, res) => {
 //POST /api/actions/
 router.post('/', (req, res) => {
     const {project_id, description, notes} = req.body;
-    
+//first check to make sure req body has all necessary pieces    
     if (!project_id || !description || !notes) {
     res.status(400)
     .json({message: "Please provide the notes and description for the new action, as well as the ID of the associated project."})
     } else {
-
+//run the submitted project_id through projectDb to first make sure a project with that ID exists
         projectDb.get(project_id)
         .then(project=>{
             if(project) {
+                //if it exists, then run the try/catch block for actionDb.insert
                 try {
                     const actionInfo = req.body;
                     actionDb.insert(actionInfo);
@@ -55,11 +56,10 @@ router.post('/', (req, res) => {
                     res.status(500).json({error: "An error occurred while saving this action."})
                 }
             } else {
-                res.status(404).json({message: "The project with that ID does not exist."})
+                res.status(404).json({message: "The action with that ID does not exist."})
             }
         })
         .catch(error=>{res.status(404).json({message: "The project with that ID does not exist."})})
-
     }
 })
 
@@ -71,6 +71,10 @@ router.put('/:id', (req, res) => {
     if (!changes.project_id || !changes.description || !changes.notes) {res.status(400)
         .json({error: "Please provide the updated action's name, description, and the ID of the associated project."})
     } else {
+//same as POST, first make sure the submitted project_id matches one that currently exists in projectDb
+projectDb.get(changes.project_id)
+.then(project=>{
+    if (project){
         actionDb.update(id, changes)
         .then(action => {
             if (action) {
@@ -85,6 +89,14 @@ router.put('/:id', (req, res) => {
             res.status(500)
             .json({error: "The action info could not be modified."})
         })
+    } else {
+        res.status(500).json({message: "The project with that submitted project ID could not be retrieved."})
+    }
+})
+        .catch(error =>{
+            res.status(404).json({message: "The project with the specified project ID does not exist."})
+        })
+
     }
 })
 
